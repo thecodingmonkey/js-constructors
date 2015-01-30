@@ -72,6 +72,12 @@ DamageSpell.prototype = Object.create(Spell.prototype, {
  * @property {mana} mana
  * @property {boolean} isAlive  Default value should be `true`.
  */
+function Spellcaster(name, health, mana) {
+   this.name = name;
+   this.health = health;
+   this.mana = mana;
+   this.isAlive = true;
+}
 
   /**
    * The spellcaster loses health equal to `damage`.
@@ -82,6 +88,16 @@ DamageSpell.prototype = Object.create(Spell.prototype, {
    * @name inflictDamage
    * @param  {number} damage  Amount of damage to deal to the spellcaster
    */
+Spellcaster.prototype.inflictDamage = function(damage) {
+   this.health = this.health - damage;
+   if (this.health < 0) {
+      this.health = 0;
+   }
+
+   if (this.health === 0) {
+      this.isAlive = false;
+   }
+}   
 
   /**
    * Reduces the spellcaster's mana by `cost`.
@@ -91,6 +107,13 @@ DamageSpell.prototype = Object.create(Spell.prototype, {
    * @param  {number} cost      The amount of mana to spend.
    * @return {boolean} success  Whether mana was successfully spent.
    */
+Spellcaster.prototype.spendMana = function(cost) {
+   if (cost > this.mana) {
+      return false;
+   }
+   this.mana = this.mana - cost;
+   return true;
+}
 
   /**
    * Allows the spellcaster to cast spells.
@@ -117,3 +140,22 @@ DamageSpell.prototype = Object.create(Spell.prototype, {
    * @param  {Spellcaster} target         The spell target to be inflicted.
    * @return {boolean}                    Whether the spell was successfully cast.
    */
+Spellcaster.prototype.invoke = function(spell, target) {
+   if ((spell instanceof Spell == false) && (spell instanceof DamageSpell == false)) {
+      return false;
+   }
+
+   if (spell instanceof DamageSpell && target instanceof Spellcaster == false) {
+      return false;
+   }
+
+   if (this.spendMana(spell.cost) === false) {
+      return false;
+   }
+
+   if (spell instanceof DamageSpell && target instanceof Spellcaster) {
+      target.inflictDamage(spell.damage);
+   }
+
+   return true;
+}
