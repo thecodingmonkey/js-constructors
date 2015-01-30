@@ -90,10 +90,13 @@ function Spellcaster(name, health, mana) {
    */
 Spellcaster.prototype.inflictDamage = function(damage) {
    this.health = this.health - damage;
+
+   // cannot go below 0 health
    if (this.health < 0) {
       this.health = 0;
    }
 
+   // check if target is alive
    if (this.health === 0) {
       this.isAlive = false;
    }
@@ -141,21 +144,26 @@ Spellcaster.prototype.spendMana = function(cost) {
    * @return {boolean}                    Whether the spell was successfully cast.
    */
 Spellcaster.prototype.invoke = function(spell, target) {
+   // spell should be of type Spell or DamageSpell
    if ((spell instanceof Spell == false) && (spell instanceof DamageSpell == false)) {
       return false;
    }
 
+   // if spell is a DamageSpell, target should be a Spellcaster
    if (spell instanceof DamageSpell && target instanceof Spellcaster == false) {
       return false;
    }
 
+   // mana check
    if (this.spendMana(spell.cost) === false) {
       return false;
    }
 
+   // dooooo damageeeeee
    if (spell instanceof DamageSpell && target instanceof Spellcaster) {
       target.inflictDamage(spell.damage);
    }
 
+   // DONE.
    return true;
 }
