@@ -263,3 +263,21 @@ describe('Spellcaster', function() {
   });
 
 });
+
+
+describe("FireSpellcaster", function() {
+  it("spells should cost half mana", function() {
+        var loren = new FireSpellcaster('Loren', 300, 100),
+            gust = new Spell('Gust', 200, 'Creates a gentle breeze.');
+        expect(loren.invoke(gust)).to.be.true;
+  });
+
+  it("double damage should be taken when <50% health", function() {
+    var loren = new FireSpellcaster('Loren', 300, 100);
+    loren.inflictDamage(160);  // 300 - 160 = 140 hp
+    loren.inflictDamage(70);   // damage should be lethal
+    expect(loren.health).to.equal(0);
+    expect(loren.isAlive).to.be.false;
+  });
+
+});

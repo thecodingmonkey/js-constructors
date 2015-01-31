@@ -10,7 +10,14 @@
  * @property {string} description
  */
 function Spell(name, cost, description) {
-   this.name = name;
+//   this.name = name;
+   Object.defineProperty( this, "name", {
+      value: name,
+      writeable: false,
+      enumerable: true,
+      configurable: true
+   });
+
    this.cost = cost;
    this.description = description;
   /**
@@ -166,4 +173,27 @@ Spellcaster.prototype.invoke = function(spell, target) {
 
    // DONE.
    return true;
+}
+
+function FireSpellcaster(name, health, mana) {
+   Spellcaster.call(this, name, health, mana);
+   this.maxHealth = health;
+}
+
+FireSpellcaster.prototype = Object.create(Spellcaster.prototype, { 
+   constructor: { 
+      value: Spellcaster
+   } 
+});
+
+FireSpellcaster.prototype.inflictDamage = function(damage) {
+   if ((this.health / this.maxHealth) < 0.5) {
+      console.log('double damage!');
+      damage = damage * 2;
+   }
+   return Spellcaster.call(this, damage);
+}
+
+FireSpellcaster.prototype.spendMana = function(cost) {
+   return Spellcaster.call(this, cost/2);
 }
