@@ -188,12 +188,12 @@ FireSpellcaster.prototype = Object.create(Spellcaster.prototype, {
 
 FireSpellcaster.prototype.inflictDamage = function(damage) {
    if ((this.health / this.maxHealth) < 0.5) {
-      console.log('double damage!');
+//      console.log('double damage!');
       damage = damage * 2;
    }
-   return Spellcaster.call(this, damage);
+   return Spellcaster.prototype.inflictDamage.call(this, damage);
 }
 
 FireSpellcaster.prototype.spendMana = function(cost) {
-   return Spellcaster.call(this, cost/2);
+   return Spellcaster.prototype.spendMana.call(this, cost/2);
 }
