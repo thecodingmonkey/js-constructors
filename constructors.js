@@ -107,7 +107,7 @@ Spellcaster.prototype.inflictDamage = function(damage) {
    if (this.health === 0) {
       this.isAlive = false;
    }
-}   
+};
 
   /**
    * Reduces the spellcaster's mana by `cost`.
@@ -123,7 +123,7 @@ Spellcaster.prototype.spendMana = function(cost) {
    }
    this.mana = this.mana - cost;
    return true;
-}
+};
 
   /**
    * Allows the spellcaster to cast spells.
@@ -152,12 +152,12 @@ Spellcaster.prototype.spendMana = function(cost) {
    */
 Spellcaster.prototype.invoke = function(spell, target) {
    // spell should be of type Spell or DamageSpell
-   if ((spell instanceof Spell == false) && (spell instanceof DamageSpell == false)) {
+   if ((spell instanceof Spell === false) && (spell instanceof DamageSpell === false)) {
       return false;
    }
 
    // if spell is a DamageSpell, target should be a Spellcaster
-   if (spell instanceof DamageSpell && target instanceof Spellcaster == false) {
+   if (spell instanceof DamageSpell && target instanceof Spellcaster === false) {
       return false;
    }
 
@@ -173,7 +173,7 @@ Spellcaster.prototype.invoke = function(spell, target) {
 
    // DONE.
    return true;
-}
+};
 
 function FireSpellcaster(name, health, mana) {
    Spellcaster.call(this, name, health, mana);
@@ -192,8 +192,8 @@ FireSpellcaster.prototype.inflictDamage = function(damage) {
       damage = damage * 2;
    }
    return Spellcaster.prototype.inflictDamage.call(this, damage);
-}
+};
 
 FireSpellcaster.prototype.spendMana = function(cost) {
    return Spellcaster.prototype.spendMana.call(this, cost/2);
-}
+};

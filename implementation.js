@@ -33,37 +33,39 @@ function logEntry(owner, action, target) {
   console.log(this.message);
 }
 
+timerLoop();
 
-//debugger;
-//breakpoint;
-
-while (wizards.length > 1) {
-  var i;
-  for (i in wizards) {
-    if (wizards[i].health > 0) {
-      // pick a spell.  its possible the wizard might choose a spell they don't
-      // have enough mana for; however, FireSpellcasters should be allowed to
-      // pick a spell if they can cast it.
-      var j = 0;
-      while (spellbook[j].cost > (wizards[i].mana * 2)) {
-        j = Math.floor( Math.random() * spellbook.length);
-      }
-
-      // pick a target at random, but should not pick self
-      var target = i;
-      while (target == i) {
-        target = Math.floor( Math.random() * wizards.length);
-      }
-
-      // cast the spell, and push into combat log
-      if (wizards[i].invoke(spellbook[j], wizards[target]) ) {
-        combatLog.push(
-            new logEntry(wizards[i], spellbook[j], wizards[target])
-          );
-      }
-    }
+function timerLoop() {
+  // pick a spell.  its possible the wizard might choose a spell they don't
+  // have enough mana for; however, FireSpellcasters should be allowed to
+  // pick a spell if they can cast it.
+  var j = 0;
+  while (spellbook[j].cost > (wizards[0].mana)) {
+    j = Math.floor( Math.random() * spellbook.length);
   }
-  wizards = wizards.filter(function(x) {return x.isAlive;});
+
+  // pick a target at random, but should not pick self
+  var target = 1 + Math.floor( Math.random() * wizards.length);
+
+  // cast the spell, and push into combat log
+  if (wizards[0].invoke(spellbook[j], wizards[target]) ) {
+    combatLog.push(
+        new logEntry(wizards[0], spellbook[j], wizards[target])
+    );
+
+    // move current wizard to end of list
+    wizards.push(wizards[0]);
+    wizards = wizards.slice(1);
+
+    // remove dead wizards
+    wizards = wizards.filter(function(x) {return x.isAlive;});
+  }
+  else {
+    console.log ('FAIL')
+        console.log (new logEntry(wizards[0], spellbook[j], wizards[target]).message);
+  }
+
+  console.log('end');
+  setTimeout(function(){ timerLoop(); } , 2000);
 }
 
-console.log(combatLog);
