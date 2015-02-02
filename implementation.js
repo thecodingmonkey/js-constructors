@@ -1,11 +1,11 @@
 var wizards = new Array(6);
 
-wizards[0] = elsa = new Spellcaster('Elsa', 9999, 400);
-wizards[1] = tahlkora = new Spellcaster('Tahlkora', 9999, 400);
-wizards[2] = aeris = new Spellcaster('Aeris', 9999, 400);
-wizards[3] = vivi = new FireSpellcaster('Vivi', 9999, 400);
-wizards[4] = terra = new FireSpellcaster('Terra', 9999, 400);
-wizards[5] = vekk = new FireSpellcaster('Vekk', 9999, 400);
+wizards[0] = new Spellcaster('Elsa', 9999, 400);
+wizards[1] = new Spellcaster('Tahlkora', 9999, 400);
+wizards[2] = new Spellcaster('Aeris', 9999, 400);
+wizards[3] = new FireSpellcaster('Vivi', 9999, 400);
+wizards[4] = new FireSpellcaster('Terra', 9999, 400);
+wizards[5] = new FireSpellcaster('Vekk', 9999, 400);
 
 var spellbook = [];
 spellbook.push( new DamageSpell('INVALID SPELL', 99999, 0, 'Select a new spell, plox.'));
@@ -27,6 +27,11 @@ function logEntry(owner, action, target) {
   this.action = action;
   this.target = target;
 
+  console.log(owner);
+  console.log(action);
+  console.log(target);
+
+
   this.message = owner.name + " casts " + action.name + " on " + target.name +
    " for " + action.damage + " damage.";
 
@@ -45,8 +50,10 @@ function timerLoop() {
   }
 
   // pick a target at random, but should not pick self
-  var target = 1 + Math.floor( Math.random() * wizards.length);
+  var target = 1 + Math.floor( Math.random() * (wizards.length-1));
 
+  console.log('j', j);
+  console.log('target', target);
   // cast the spell, and push into combat log
   if (wizards[0].invoke(spellbook[j], wizards[target]) ) {
     combatLog.push(
@@ -61,11 +68,15 @@ function timerLoop() {
     wizards = wizards.filter(function(x) {return x.isAlive;});
   }
   else {
-    console.log ('FAIL')
-        console.log (new logEntry(wizards[0], spellbook[j], wizards[target]).message);
+    console.log ('FAIL');
+    console.log (new logEntry(wizards[0], spellbook[j], wizards[target]).message);
   }
 
-  console.log('end');
-  setTimeout(function(){ timerLoop(); } , 2000);
+//  console.log('end');
+
+  if (wizards.length > 1) {
+    setTimeout(function(){ timerLoop(); } , 2000);
+  }
+
 }
 

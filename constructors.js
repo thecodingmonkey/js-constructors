@@ -151,8 +151,10 @@ Spellcaster.prototype.spendMana = function(cost) {
    * @return {boolean}                    Whether the spell was successfully cast.
    */
 Spellcaster.prototype.invoke = function(spell, target) {
+   console.log(spell);
+
    // spell should be of type Spell or DamageSpell
-   if ((spell instanceof Spell === false) && (spell instanceof DamageSpell === false)) {
+   if (((spell instanceof Spell) === false) && ((spell instanceof DamageSpell) === false)) {
       return false;
    }
 
@@ -169,6 +171,7 @@ Spellcaster.prototype.invoke = function(spell, target) {
    // dooooo damageeeeee
    if (spell instanceof DamageSpell && target instanceof Spellcaster) {
       target.inflictDamage(spell.damage);
+      return true;
    }
 
    // DONE.
