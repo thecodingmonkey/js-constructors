@@ -74,7 +74,8 @@ function timerLoop() {
   }
 
   if (document.getElementById('stats')) {
-    document.getElementById('stats').innerHTML = wizards.reduce( function(p, c, i, a) {
+    document.getElementById('stats').innerHTML = 
+    wizards.slice().sort(function(a, b) {return a.name > b.name;}).reduce( function(p, c, i, a) {
       return p + c.name + ": " + c.health + " HP, " + c.mana + " mana<br/>";
     }, "");
 
