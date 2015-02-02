@@ -27,15 +27,18 @@ function logEntry(owner, action, target) {
   this.action = action;
   this.target = target;
 
-  console.log(owner);
-  console.log(action);
-  console.log(target);
-
-
   this.message = owner.name + " casts " + action.name + " on " + target.name +
    " for " + action.damage + " damage.";
 
   console.log(this.message);
+  var tmp = this.message;
+  if (document.getElementById('console')) {
+    document.getElementById('console').innerHTML += "<br/>" + this.message;
+  } else {
+    window.onload = function() {
+      document.getElementById('console').innerHTML = tmp;
+    };
+  }
 }
 
 timerLoop();
@@ -52,8 +55,6 @@ function timerLoop() {
   // pick a target at random, but should not pick self
   var target = 1 + Math.floor( Math.random() * (wizards.length-1));
 
-  console.log('j', j);
-  console.log('target', target);
   // cast the spell, and push into combat log
   if (wizards[0].invoke(spellbook[j], wizards[target]) ) {
     combatLog.push(
@@ -72,7 +73,15 @@ function timerLoop() {
     console.log (new logEntry(wizards[0], spellbook[j], wizards[target]).message);
   }
 
-//  console.log('end');
+  if (document.getElementById('stats')) {
+    document.getElementById('stats').innerHTML = wizards.reduce( function(p, c, i, a) {
+      return p + c.name + ": " + c.health + " HP, " + c.mana + " mana<br/>";
+    }, "");
+
+
+
+  }
+
 
   if (wizards.length > 1) {
     setTimeout(function(){ timerLoop(); } , 2000);

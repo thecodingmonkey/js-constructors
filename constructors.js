@@ -26,7 +26,7 @@ function Spell(name, cost, description) {
    * @name printDetails
    */
    this.printDetails = function() {
-     console.log(this.name+ " - cost " + this.cost + " - description " + this.description)
+     console.log(this.name+ " - cost " + this.cost + " - description " + this.description);
    }
 
 
